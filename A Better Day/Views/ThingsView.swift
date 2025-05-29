@@ -39,13 +39,29 @@ struct ThingsView: View {
 // if does not exist create a day and insert it!
         }
         
-        return VStack (alignment: .leading, spacing:20) {
+        return VStack (spacing:20) {
                 
                 Text("Things")
                     .font(.largeTitle)
                     .bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            
                 
                 Text("These are the things that make you feel positive and uplifted!")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+            
+            if things.count == 0 {
+                // Image
+                Image("things")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: 300)
+                
+                // Image tooltip
+                ToolTipView(text: "Start by adding things that brighten your day, tap the button below to get started!")
+            } else {
+                
                 
                 List (things) { thing in
                     
@@ -56,25 +72,25 @@ struct ThingsView: View {
                         Spacer()
                         
                         Button {
-// Append the thing they tap to list of things done for the day
+                            // Append the thing they tap to list of things done for the day
                             if today.things.contains(thing) {
-// Remove things from today
+                                // Remove things from today
                                 today.things.removeAll {
                                     t in t == thing
                                 }
                                 try? context.save()
                             }
                             else {
-// Add thing to today
+                                // Add thing to today
                                 today.things.append(thing)
                             }
-
+                            
                             
                             
                         }
                         label : {
                             
-// If this thing is already in todays list, show a solid check instead
+                            // If this thing is already in todays list, show a solid check instead
                             if today.things.contains(thing) {
                                 Image(systemName: "checkmark.circle.fill")
                                 // changing the tint to blue
@@ -88,7 +104,7 @@ struct ThingsView: View {
                     }
                 }
                 .listStyle(.plain)
-                
+            }
                 Spacer()
                 
                 Button ("Add New Thing") {
