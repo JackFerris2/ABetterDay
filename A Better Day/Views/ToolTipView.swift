@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct ToolTipView: View {
+    
+    var text: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text(text)
+            .foregroundStyle(Color.blue)
+            .padding()
+            .background {
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(Color.blue, lineWidth: 1)
+// adding light blue backround border in assets to box
+                    .background(Color("light-blue"))
+            }
     }
 }
 
 #Preview {
-    ToolTipView()
+    ToolTipView(text: "Hello, World!")
 }
