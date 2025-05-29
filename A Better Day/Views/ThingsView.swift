@@ -25,7 +25,7 @@ struct ThingsView: View {
         // add method to return the current day
         func getToday() -> Day {
             
-// TODO: Try to retrive today fron the database
+// Try to retrive today fron the database
             if today.count > 0 {
                 return today.first!
             }
@@ -36,9 +36,7 @@ struct ThingsView: View {
                 
                 return today
             }
-// TODO: if does not exist create a day and insert it!
-            
-            
+// if does not exist create a day and insert it!
         }
         
         return VStack (alignment: .leading, spacing:20) {
@@ -51,17 +49,40 @@ struct ThingsView: View {
                 
                 List (things) { thing in
                     
+                    let today = getToday()
+                    
                     HStack {
                         Text(thing.title)
                         Spacer()
                         
                         Button {
-// TODO: Add the thing to today
-// TODO: Append the thing they tap to list of things done for the day
-                            let today = getToday()
-                            today.things.append(thing)
-                        } label : {
-                            Image(systemName: "checkmark.circle")
+// Append the thing they tap to list of things done for the day
+                            if today.things.contains(thing) {
+// Remove things from today
+                                today.things.removeAll {
+                                    t in t == thing
+                                }
+                                try? context.save()
+                            }
+                            else {
+// Add thing to today
+                                today.things.append(thing)
+                            }
+
+                            
+                            
+                        }
+                        label : {
+                            
+// If this thing is already in todays list, show a solid check instead
+                            if today.things.contains(thing) {
+                                Image(systemName: "checkmark.circle.fill")
+                                // changing the tint to blue
+                                    .foregroundStyle(.blue)
+                            }
+                            else {
+                                Image(systemName: "checkmark.circle")
+                            }
                         }
                         
                     }
