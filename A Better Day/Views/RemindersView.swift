@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 import UserNotifications
 
 struct RemindersView: View {
@@ -18,14 +19,24 @@ struct RemindersView: View {
     @State private var selectedDate = Date().addingTimeInterval(86400)
     @State private var isSettingsDialogueShowing = false
     
+    var formattedTime: String {
+        // Fixed: use consistent lowercase 'formatter' variable name
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter.string(from: selectedDate)
+    }
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(spacing: 20) {
             
             Text("Reminders")
                 .font(.largeTitle)
                 .bold()
+                .frame(maxWidth: .infinity, alignment: .leading)
             
             Text("Remind yourself to do something uplifting everyday.")
+                .frame(maxWidth: .infinity, alignment: .leading)
+
             
 // Toggle to turn on or off reminders
             Toggle(isOn: $isRemindersOn) {
@@ -39,9 +50,34 @@ struct RemindersView: View {
                     DatePicker("", selection: $selectedDate, displayedComponents: .hourAndMinute)
                         .labelsHidden()
                 }
+                
+                // tool tip saying when reminders are set for
+                // displaying icon
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(Image(systemName: "bell.and.waves.left.and.right"))
+                    Text("You'll receive a friendly reminder at \(formattedTime) on selected days to make your day better.")
+                }
+                .foregroundStyle(Color.blue)
+                .padding()
+                .background {
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(Color.blue, lineWidth: 1)
+                        .background(Color("light-blue"))
+                }
+            } else {
+                // tool tip to turn reminders on
+                ToolTipView(text: "Turn on reminders above to remind yourself to make each day better.")
             }
+            
+            Spacer()
+            Image("reminders")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: 300)
+            Spacer()
+            
         }
-        .padding()
+        .padding(.trailing, 2)
         .onAppear {
             selectedDate = Date(timeIntervalSince1970: reminderTime)
         }

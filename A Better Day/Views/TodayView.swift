@@ -49,7 +49,7 @@ struct TodayView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: 300)
-                
+                                
                 ToolTipView(text: "Take some time to do something that recharges you and makes you feel good about yourself. Hit the log button below to start! ") 
                 
                 Button {
